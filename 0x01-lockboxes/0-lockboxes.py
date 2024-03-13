@@ -8,13 +8,12 @@ def canUnlockAll(boxes):
         return False
 
     keys = set([0])  # Set to keep track of the keys obtained
-    unlocked = set([0])  # Set to keep track of the boxes that have been unlocked
-
+    unlocked = set([0])
     while keys:
         box = keys.pop()  # Get a box with keys
         for key in boxes[box]:  # Check keys inside the box
             if key not in unlocked:  # If the box is not yet unlocked
                 unlocked.add(key)  # Unlock the box
-                keys.add(key)  # Add keys found inside the box to the set of keys
+                keys.add(key)
 
     return len(unlocked) == len(boxes)
