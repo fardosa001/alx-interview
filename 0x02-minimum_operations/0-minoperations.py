@@ -10,6 +10,9 @@ def minOperations(n):
     operations = 0
     str_char = "H"
 
+    if n == 1:
+        return 0
+
     while current_length < n:
         if n % current_length == 0:
             copied_content = str_char
