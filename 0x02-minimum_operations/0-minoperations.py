@@ -2,16 +2,14 @@
 """Minimum Operations"""
 
 
-def minOperations(n) -> int:
+def minOperations(n):
     """calculates the fewest number of operations
     needed to result in exactly n H characters in the file."""
     current_length = 1
     copied_content = ""
+
     operations = 0
     str_char = "H"
-
-    if n == 1:
-        return 0
 
     while current_length < n:
         if n % current_length == 0:
@@ -20,4 +18,5 @@ def minOperations(n) -> int:
         str_char += copied_content
         current_length = len(str_char)
         operations += 1
+    
     return operations
