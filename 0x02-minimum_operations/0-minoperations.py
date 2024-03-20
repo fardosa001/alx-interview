@@ -18,5 +18,5 @@ def minOperations(n):
         str_char += copied_content
         current_length = len(str_char)
         operations += 1
-    
+
     return operations
