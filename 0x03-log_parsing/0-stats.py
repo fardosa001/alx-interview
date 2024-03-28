@@ -22,11 +22,13 @@ try:
         split_line = line.split()
 
         if len(split_line) >= 7:
-            file_size += int(split_line[-1])
-
-            status_code = split_line[-2]
-            if status_code in status_codes:
-                status_codes[status_code] += 1
+            try:
+                file_size += int(split_line[-1])
+                status_code = split_line[-2]
+                if status_code in status_codes:
+                    status_codes[status_code] += 1
+            except ValueError:
+                pass
 
         if line_num % 10 == 0:
             print_stats(file_size, status_codes)
