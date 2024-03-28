@@ -5,8 +5,8 @@ from sys import stdin
 
 def print_stats(file_size, status_codes):
     """Prints statistics for file size and status codes."""
-    print("File_size: ", file_size)
-    for code in sorted(status_codes):
+    print("File_size: ", str(file_size))
+    for code in sorted(status_codes.keys()):
         if status_codes[code] > 0:
             print(code + ": " + str(status_codes[code]))
 
