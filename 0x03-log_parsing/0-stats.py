@@ -1,40 +1,59 @@
 #!/usr/bin/python3
 """Log parsing: reads stdin line by line and computes metrics"""
 from sys import stdin
+import re
 
 
-def print_stats(file_size, status_codes):
+def initialize_log():
+    """Initialize log dictionary"""
+    status_codes = {200, 301, 400, 401, 403, 404, 405, 500}
+    log = {"file_size": 0, "code_list":
+           {str(code): 0 for code in status_codes}}
+    return log
+
+
+def process_line(line, regex, log):
+    """processes each log line"""
+    match = regex.match(line)
+    if match:
+        stat_code, file_size = match.group(1, 2)
+
+        log["file_size"] += int(file_size)
+        if stat_code.isdecimal():
+            log["code_list"][stat_code] += 1
+
+        return log
+
+
+def print_stats(log):
     """Prints statistics for file size and status codes."""
-    print("File_size: ", str(file_size))
-    for code in sorted(status_codes.keys()):
-        if status_codes[code] > 0:
-            print(code + ": " + str(status_codes[code]))
+    print("File size: {}".format(log['file_size']))
+    for code in sorted(log["code_list"]):
+        if log["code_list"][code]:
+            print(f"{code}: {log['code_list'][code]}")
 
 
-line_num = 0
-file_size = 0
-status_codes = {"200": 0, "301": 0, "400": 0, "401": 0,
-                "403": 0, "404": 0, "405": 0, "500": 0}
+def main():
+    """main function"""
+    regex = re.compile(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3} - \[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d+\] "GET /projects/260 HTTP/1.1" (\d{3}) (\d+)')
 
-try:
-    for line in stdin:
-        line_num += 1
-        split_line = line.split()
+    log = initialize_log()
+    line_count = 0
 
-        if len(split_line) >= 7:
-            try:
-                file_size += int(split_line[-1])
-                status_code = split_line[-2]
-                if status_code in status_codes:
-                    status_codes[status_code] += 1
-            except ValueError:
-                pass
+    try:
+        for line in stdin:
+            line = line.strip()
 
-        if line_num % 10 == 0:
-            print_stats(file_size, status_codes)
+            line_count += 1
 
-    print_stats(file_size, status_codes)
+            log = process_line(line, regex, log)
 
-except KeyboardInterrupt:
-    print_stats(file_size, status_codes)
-    raise
+            if line_count % 10 == 0:
+                print_stats(log)
+
+    except KeyboardInterrupt:
+        print_stats(log)
+
+
+if __name__ == "__main__":
+    main()
