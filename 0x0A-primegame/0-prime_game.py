@@ -2,34 +2,28 @@
 """Prime Game"""
 
 
-def is_prime(num):
-    """ checks for prime no."""
-    if num < 2:
-        return False
-    for i in range(2, int(num**0.5) + 1):
-        if num % i == 0:
-            return False
-    return True
-
-
 def isWinner(x, nums):
-    """returns the winner to prime game"""
-    maria_wins = 0
-    ben_wins = 0
-
-    for n in nums:
-        if n == 1:
-            ben_wins += 1
-            continue
-
-        if n % 2 == 0 or is_prime(n):
-            maria_wins += 1
-        else:
-            ben_wins += 1
-
-    if maria_wins % 2 == 1:
-        return "Maria"
-    elif maria_wins % 2 == 0:
-        return "Ben"
-    else:
+    """Function that performs prime game"""
+    if not nums or x < 1:
         return None
+    n = max(nums)
+    fltr = [True for _ in range(max(n + 1, 2))]
+    for i in range(2, int(pow(n, 0.5)) + 1):
+        if not fltr[i]:
+            continue
+        for j in range(i * i, n + 1, i):
+            fltr[j] = False
+    fltr[0] = fltr[1] = False
+    c = 0
+    for i in range(len(fltr)):
+        if fltr[i]:
+            c += 1
+        fltr[i] = c
+    plyr1 = 0
+    for n in nums:
+        plyr1 += fltr[n] % 2 == 1
+    if plyr1 * 2 == len(nums):
+        return None
+    if plyr1 * 2 > len(nums):
+        return "Maria"
+    return "Ben"
