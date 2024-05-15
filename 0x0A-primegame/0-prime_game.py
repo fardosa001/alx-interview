@@ -3,7 +3,7 @@
 
 
 def is_prime(num):
-    """check for prime no."""
+    """ checks for prime no."""
     if num < 2:
         return False
     for i in range(2, int(num**0.5) + 1):
@@ -13,7 +13,7 @@ def is_prime(num):
 
 
 def isWinner(x, nums):
-    """return winner of the most rounds"""
+    """returns the winner to prime game"""
     maria_wins = 0
     ben_wins = 0
 
@@ -24,13 +24,12 @@ def isWinner(x, nums):
 
         if n % 2 == 0 or is_prime(n):
             maria_wins += 1
-            continue
+        else:
+            ben_wins += 1
 
-        ben_wins += 1
-
-    if maria_wins > ben_wins:
+    if maria_wins % 2 == 1:
         return "Maria"
-    elif maria_wins < ben_wins:
+    elif maria_wins % 2 == 0:
         return "Ben"
     else:
         return None
